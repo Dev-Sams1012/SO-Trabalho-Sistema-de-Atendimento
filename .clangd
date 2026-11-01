@@ -1,0 +1,2 @@
+CompileFlags:
+  Add: [-Imodulos, -std=gnu11]
