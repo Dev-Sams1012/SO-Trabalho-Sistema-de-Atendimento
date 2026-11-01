@@ -1,21 +1,13 @@
 #ifndef FILA_H
 #define FILA_H
 
+#include "cliente_info/cliente_info.h"
+
 #include <stdbool.h>
 #include <stddef.h>
 #include <sys/types.h>
 
 #define FILA_CAPACIDADE 100
-
-#define PRIORIDADE_BAIXA 0
-#define PRIORIDADE_ALTA 1
-
-typedef struct {
-  pid_t pid;
-  long long hora_chegada; // ms desde o inicio do programa
-  int prioridade;         // PRIORIDADE_ALTA ou PRIORIDADE_BAIXA
-  int tempo_atendimento;  // lido do arquivo demanda
-} Cliente;
 
 // Fila circular simples (vetor + indice de inicio + quantidade)
 typedef struct {
