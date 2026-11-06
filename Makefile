@@ -39,7 +39,7 @@ all: $(BIN_ATENDIMENTO) $(BIN_ANALISTA) $(BIN_CLIENTE)
 $(BIN_ATENDIMENTO): $(OBJ_MAIN) $(OBJ_MODULOS)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
-$(BIN_ANALISTA): $(OBJ_ANALISTA)
+$(BIN_ANALISTA): $(OBJ_ANALISTA) $(DIR_BUILD)/modulos/lng/lng.o $(DIR_BUILD)/modulos/semaforo/semaforo.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
 $(BIN_CLIENTE): $(OBJ_CLIENTE)
@@ -54,7 +54,7 @@ $(DIR_BUILD)/%.o: %.c
 $(DIR_BUILD)/testes/%: $(DIR_BUILD)/testes/%.o $(OBJ_MODULOS)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
-test: $(BIN_TESTES)
+test: $(BIN_ANALISTA) $(BIN_TESTES)
 	@for t in $(BIN_TESTES); do \
 		echo "== $$t"; \
 		./$$t || exit 1; \
@@ -65,7 +65,7 @@ run: all
 	./$(BIN_ATENDIMENTO) $(N) $(X)
 
 clean:
-	rm -rf $(DIR_BUILD) demanda.txt lng.txt
+	rm -rf $(DIR_BUILD) demanda.txt lng.txt lng.tmp analista.pid analista_saida.txt
 
 # Dependencias de cabecalhos geradas automaticamente (-MMD -MP)
 -include $(shell find $(DIR_BUILD) -name '*.d' 2>/dev/null)
