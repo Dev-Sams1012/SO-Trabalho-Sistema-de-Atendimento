@@ -36,6 +36,12 @@ static int travar(sem_t *semaforo) {
 }
 
 int main(void) {
+  // Ctrl+C no terminal manda SIGINT para o grupo inteiro, inclusive para o
+  // analista dormindo. O sinal ficaria pendente e o mataria ao ser acordado,
+  // antes de imprimir os PIDs que faltam. Quem decide quando ele termina eh o
+  // Atendimento (SIGKILL), entao o SIGINT eh ignorado.
+  signal(SIGINT, SIG_IGN);
+
   sem_t *sem_block = semaforo_abrir(SEMAFORO_NOME_BLOCK);
   if (sem_block == SEM_FAILED) {
     perror("analista: abrir " SEMAFORO_NOME_BLOCK);
@@ -46,7 +52,7 @@ int main(void) {
     return 1;
 
   pid_t pids[ANALISTA_MAX_POR_VEZ];
-    for (;;) {
+  for (;;) {
     raise(SIGSTOP);
 
     if (travar(sem_block) != 0) {
