@@ -15,7 +15,7 @@ DIR_BUILD := build
 FONTES_MODULOS := $(filter-out modulos/analista/analista.c,$(wildcard modulos/*/*.c))
 OBJ_MODULOS    := $(FONTES_MODULOS:%.c=$(DIR_BUILD)/%.o)
 
-OBJ_MAIN     := $(DIR_BUILD)/src/main.o
+OBJ_MAIN     := $(DIR_BUILD)/main.o
 OBJ_ANALISTA := $(DIR_BUILD)/modulos/analista/analista.o
 OBJ_CLIENTE  := $(DIR_BUILD)/externo/cliente.o
 
@@ -54,7 +54,7 @@ $(DIR_BUILD)/%.o: %.c
 $(DIR_BUILD)/testes/%: $(DIR_BUILD)/testes/%.o $(OBJ_MODULOS)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDLIBS)
 
-test: $(BIN_ANALISTA) $(BIN_TESTES)
+test: all $(BIN_TESTES)
 	@for t in $(BIN_TESTES); do \
 		echo "== $$t"; \
 		./$$t || exit 1; \
@@ -65,7 +65,7 @@ run: all
 	./$(BIN_ATENDIMENTO) $(N) $(X)
 
 clean:
-	rm -rf $(DIR_BUILD) demanda.txt lng.txt lng.tmp analista.pid analista_saida.txt
+	rm -rf $(DIR_BUILD) demanda.txt lng.txt lng.tmp analista.pid analista_saida.txt atendimento_saida.txt
 
 # Dependencias de cabecalhos geradas automaticamente (-MMD -MP)
 -include $(shell find $(DIR_BUILD) -name '*.d' 2>/dev/null)
